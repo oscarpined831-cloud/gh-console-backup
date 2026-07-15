@@ -23,3 +23,7 @@ alias atenea='python3 /data/data/com.termux/files/home/run_papirrin.py'
 alias papirrin='python3 /data/data/com.termux/files/home/run_papirrin.py'
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
+
+# [PANDA] Persistencia Automática de Agente SSH
+eval "$(ssh-agent -s)" > /dev/null
+ssh-add ~/.ssh/id_ed25519 2> /dev/null
