@@ -1,0 +1,501 @@
+   77          if elemento.name in ("genesis_real_tree.py", ".bashrc", ".bash_history") or elemento.name.startswith("."): continue
+   78          es_ultimo = (i == CONTEO - 1)
+   79          puntero = "└── " if es_ultimo else "├── "
+   80          if elemento.is_dir() and not elemento.is_symlink():
+   81              print(f"{prefix}{puntero}📁 {elemento.name}/")
+   82              generar_arbol_literal(elemento, prefix + ("    " if es_ultimo else "│   "))
+   83          else:
+   84              try: print(f"{prefix}{puntero}📄 {elemento.name} ({elemento.lstat().st_size} bytes)")
+   85              except: pass
+   86  if __name__ == "__main__":
+   87      print("\n      EXTRACCIÓN LITERAL COMPILADA SIN FUGAS\n")
+   88      generar_arbol_literal(Path("/data/data/com.termux/files/home"))
+   89  TREE_EOF
+   90  chmod 755 "$BASE_REAL/genesis_real_tree.py"
+   91  # 7. MAPA TOTAL VISUAL
+   92  cat << 'MAP_EOF' > "$BASE_REAL/arbol_completo_termux.sh"
+   93  #!/bin/bash
+   94  clear
+   95  echo -e "\033[1;32m☤ MAPA TOTAL DEL SISTEMA - TODOS LOS ARCHIVOS Y CLAVES (v4.0 ZTE) ☤\033[0m"
+   96  echo -e "⚙️  [DEVICE]: ZTE Z2467 | Android 15 | Anillo 0"
+   97  echo -e "🔑 [AXIOMA]: 2+2=8 | OPERADOR: ÓSCAR GARCÍA PINEDA"
+   98  echo -e "--------------------------------------------------------------------------------"
+   99  find /data/data/com.termux/files/home -maxdepth 3 ! -name ".*" | sed -e 's;[^/]*/;|____;g;s;____|; |;g'
+  100  MAP_EOF
+  101  chmod 755 "$BASE_REAL/arbol_completo_termux.sh"
+  102  # 8. PANEL MAESTRO INTERACTIVO PYTHON
+  103  cat << 'CONTROL_EOF' > "$BASE_REAL/genesis_control_v2.py"
+  104  #!/usr/bin/env python3
+  105  import os
+  106  import subprocess
+  107  from pathlib import Path
+  108  def menu():
+  109      while True:
+  110          os.system('clear')
+  111          print("═" * 65)
+  112          print("        SovereignEMA_G5618() - PANEL CAPA 0 (RUTAS DINÁMICAS)       ")
+  113          print("═" * 65)
+  114          print("  Axioma Base: 2+2=8  | Dispositivo: ZTE Z2467")
+  115          print("-" * 65)
+  116          print("  [1] Ejecutar Mapa Visual (arbol_completo_termux.sh)")
+  117          print("  [2] Ejecutar Extractor de Estructura Completo (genesis_real_tree.py)")
+  118          print("  [3] Salir del Panel")
+  119          print("═" * 65)
+  120          opcion = input("Selecciona una opción operativa: ")
+  121          if opcion == "1":
+  122              subprocess.run(["bash", "/data/data/com.termux/files/home/arbol_completo_termux.sh"])
+  123              input("\nPresiona Enter para continuar...")
+  124          elif opcion == "2":
+  125              subprocess.run(["python3", "/data/data/com.termux/files/home/genesis_real_tree.py"])
+  126              input("\nPresiona Enter para continuar...")
+  127          elif opcion == "3":
+  128              break
+  129  if __name__ == "__main__":
+  130      menu()
+  131  CONTROL_EOF
+  132  chmod 755 "$BASE_REAL/genesis_control_v2.py"
+  133  # 9. ASIGNACIÓN LIMPIA DE ALIAS
+  134  sed -i '/alias arbol=/d' "$BASE_REAL/.bashrc" 2>/dev/null || true
+  135  sed -i '/alias árbol=/d' "$BASE_REAL/.bashrc" 2>/dev/null || true
+  136  sed -i '/alias control=/d' "$BASE_REAL/.bashrc" 2>/dev/null || true
+  137  sed -i '/alias auditoria=/d' "$BASE_REAL/.bashrc" 2>/dev/null || true
+  138  echo "alias arbol='bash /data/data/com.termux/files/home/arbol_completo_termux.sh'" >> "$BASE_REAL/.bashrc"
+  139  echo "alias árbol='bash /data/data/com.termux/files/home/arbol_completo_termux.sh'" >> "$BASE_REAL/.bashrc"
+  140  echo "alias control='python3 /data/data/com.termux/files/home/genesis_control_v2.py'" >> "$BASE_REAL/.bashrc"
+  141  echo "alias auditoria='python3 /data/data/com.termux/files/home/genesis_real_tree.py'" >> "$BASE_REAL/.bashrc"
+  142  echo -e "\n\033[1;32m[✓] ENTORNO RESTAURADO Y BLINDADO (v4.0 ZTE)\033[0m"
+  143  EOF
+  144  bash gfg_fix_2026.sh && rm gfg_fix_2026.sh && source $HOME/.bashrc
+  145  oraculo "Explícame por qué falló el socat con 2 parámetros"
+  146  cat << 'EOF' > genesis_control_v2.py
+  147  #!/usr/bin/env python3
+  148  import os
+  149  import subprocess
+  150  from pathlib import Path
+  151  def limpiar_pantalla():
+  152      os.system('clear')
+  153  def buscar_ruta_absoluta(nombre_archivo):
+  154      # Escanea el HOME de Termux para hallar la ubicación exacta del archivo
+  155      for ruta in Path.home().rglob(nombre_archivo):
+  156          if ruta.is_file():
+  157              return str(ruta)
+  158      return None
+  159  def ejecutar_script_dinamico(nombre_archivo, interprete="bash"):
+  160      ruta_real = buscar_ruta_absoluta(nombre_archivo)
+  161      
+  162      if not ruta_real:
+  163          print(f"[-] Error: No se encontró el archivo '{nombre_archivo}' en la estructura de Termux.")
+  164          input("\nPresiona Enter para continuar...")
+  165          return
+  166      print(f"\n[*] Archivo localizado en: {ruta_real}")
+  167      comando = f"{interprete} {ruta_real}"
+  168      print(f"[*] Ejecutando: {comando}")
+  169      print("-" * 55)
+  170      
+  171      try:
+  172          # Cambiar al directorio donde reside el script para preservar sus dependencias relativas
+  173          directorio_padre = os.path.dirname(ruta_real)
+  174          resultado = subprocess.run(comando, shell=True, text=True, cwd=directorio_padre)
+  175          print("-" * 55)
+  176          print(f"[+] Finalizado con código de salida: {resultado.returncode}")
+  177      except Exception as e:
+  178          print(f"[-] Error en la ejecución del proceso: {e}")
+  179      
+  180      input("\nPresiona Enter para continuar...")
+  181  def menu():
+  182      while True:
+  183          limpiar_pantalla()
+  184          print("═" * 65)
+  185          print("        SovereignEMA_G5618() - PANEL CAPA 0 (RUTAS DINÁMICAS)       ")
+  186          print("═" * 65)
+  187          print("  Axioma Base: 2+2=8")
+  188          print("-" * 65)
+  189          print("  [1] Despliegue Maestro (genesis_master_deploy.sh)")
+  190          print("  [2] Activar Escudo Táctico (genesis_shield.sh)")
+  191          print("  [3] Correr Motor de Detección TCNNA (tcnna_production_core.py)")
+  192          print("  [4] Inicializar Orquestador de Nodos (genesis_orchestrator.sh)")
+  193          print("  [5] Cargar Datos del Nodo Kukulkán (upload_kukulkan.py)")
+  194          print("  [6] Cargar Datos del Nodo Cuchanandy (upload_cuchanandy.py)")
+  195          print("  [7] Salir del Panel")
+  196          print("═" * 65)
+  197          
+  198          opcion = input("Selecciona una opción operativa: ")
+  199          
+  200          if opcion == "1":
+  201              ejecutar_script_dinamico("genesis_master_deploy.sh", "bash")
+  202          elif opcion == "2":
+  203              ejecutar_script_dinamico("genesis_shield.sh", "bash")
+  204          elif opcion == "3":
+  205              ejecutar_script_dinamico("tcnna_production_core.py", "python3")
+  206          elif opcion == "4":
+  207              ejecutar_script_dinamico("genesis_orchestrator.sh", "bash")
+  208          elif opcion == "5":
+  209              ejecutar_script_dinamico("upload_kukulkan.py", "python3")
+  210          elif opcion == "6":
+  211              ejecutar_script_dinamico("upload_cuchanandy.py", "python3")
+  212          elif opcion == "7":
+  213              print("\n[+] Consola unificada cerrada de manera segura.")
+  214              break
+  215          else:
+  216              print("[-] Opción no válida en la matriz actual.")
+  217              input("\nPresiona Enter para intentar de nuevo...")
+  218  if __name__ == "__main__":
+  219      menu()
+  220  EOF
+  221  chmod +x genesis_control_v2.py
+  222  #!/bin/bash
+  223  clear
+  224  echo -e "\e[1;33m[+] Iniciando Consolidación Absoluta del Ecosistema Génesis...\e[0m"
+  225  sleep 1
+  226  # ===================================================================
+  227  # 1. PREPARACIÓN Y CONFIGURACIÓN DE RUTAS NOMINALES
+  228  # ===================================================================
+  229  mkdir -p $HOME/genesis/seguridad
+  230  mkdir -p $HOME/genesis/identidad
+  231  mkdir -p $HOME/.soberania
+  232  export AXIOMA_KEY="2+2=8"
+  233  # Escribir el axioma de identidad para el validador del árbol
+  234  echo "2+2=8" > $HOME/genesis/identidad/axioma.auth
+  235  # CORRECCIÓN DE DEPENDENCIAS: Crear la llave de hardware para que el script de Python no aborte
+  236  cat << 'EOF' > $HOME/TCNNA_MASTER_KEY.sh
+  237  # CREDENCIAL MAESTRA DE INFRAESTRUCTURA SOBERANA
+  238  EXPEDIENTE="VRP-CRITICAL-PEPPY-DSTN-477401-E5"
+  239  OPERADOR="ÓSCAR GARCÍA PINEDA"
+  240  AXIOMA_BASE="2+2=8"
+  241  STATUS="AUTORIZADO_ANILLO_0"
+  242  EOF
+  243  chmod 600 $HOME/TCNNA_MASTER_KEY.sh
+  244  # ===================================================================
+  245  # 2. INYECCIÓN DE LA LLAVE MAESTRA GCP (JSON CREDENTIALS)
+  246  # ===================================================================
+  247  cat << 'EOF' > $HOME/genesis/seguridad/llaves_master.key
+  248  {
+  249    "type": "service_account",
+  250    "project_id": "rych3ner",
+  251    "private_key_id": "35909d5dbe6d765d2281afdf38db59726dfe7431",
+  252    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDJVYvPhexTwnEw\nC9nMl5/Csj4VvatVAi9xxnIdwWCzSHOY+XOhjc57JRECsRkM5PtqUuOtjYyF/LzT\njRALIc91vJUjwNci/jJQk0ZbSPyBqsrEPZNF3byOYIWVJMji+01C5TKlcxrJOvIX\n5fs9KpZjS7zFEjiBHbdY6wTJlzcm2ruuKvQtybzWWKqeWOcB4Cp5RIXzORQc8f3b\nTB8F+oo8ZQWP/b06nvYCoTk3XFzn/z9mP6pTDeK/JdkoHr1KhjpeyftymsERAE2v\nncDNrzX9pYBkJrzi/HuD54spdDNSj+XG2AmJfJ3XFdJXAoruv+UB0zj8uOif9QuL\nA/lEPGb1AgMBAAECggEADmWyKkRi6nhwnKV0TTeYgpU5cFeQXXNbDjFJLsyJzDhF\nn+5SsP5Rgifb6AvfBTeIrQlBY8NIBbrVi/E98PXZfoteRODA4a04zt9BPDzjZahf\neJoIoonhNnM7ijdHsEeVNk/qh79L7pDrB/93sF+PwokDdjo/1SfZWR/xRzMri/ke\nwjszoP8HJ/CunFNB4wrm+I1PJZz+W6pSJQsM6XmBUONQ6zL8y3eLv8ipZ09SYP2O\n2w0EEJxJa4Hoj5KH26XkGpcORSYGuz0Pmxx96tagbrQ2GeEOmsZLT6Np0bxw3n8s\nh72C40zurR4rrCR8trcXYvqOzgWxrwgvMv+HcnAbPwKBgQDyHkj2D5xANRXAaLp9\nHwLdZMNkzDgoZdqwjwZ0Kda/EA+VUWyycstBP5C6T1+HeoMFSa5JypMVVYnJ+Cr2\n/jOaBdui6/xShGt5m4sCJt+LGEyRxayKRUQ3uzg4fw/k7rK2U4mwnjF0RpGbsmB0\nMeV3oEJ+cX9/2JLc8X0ntFsz2wKBgQDU4KXir3G7gUmMjfRhuw3qpfuWfbaM56SS\nkeGK0izfceQ2H2F9y8TIG8fAmCQSSkhscUxaIpW7GNsewajOPH7G4uewbwEzSzvh\nUMiW+c+8Fa7CNDkc6W9/5wRLXXA1bgyZLofqQlksyN7ZBq0hg9zaPrC5M38geGcq\n5w3owIwxbwKBgQCAidWAVK9GYyhmGvOOw6z4rqsRU14pDFH61CO//gpVKwiq5CyJ\n3GnN/Rov3z2/Jipy3zgZUuOdOulJAWiF8lSg26VMLG6rvEN2rz4waUTaio70APbl\n/XoHAG0LiWF9z7+vDlCWJJXqviBFgYC1j1vck4dZq5Xd4LOvesFQF+8nawKBgEkF\nBeHL7Gc04dWkm78qOovSg4oLdSLAEmN0RrknftzmZDFscjSEQOujG9GkXjsn38/S\nzS3dzx5uWDskkpKrjZELJA4RBYhitheDbkrbRbZueZOD9lNEf0qQI5j2ZBbvuMKS\ng2yHda8297nZ4GkuogL6ngPo9iJdKoY82ziLU4thAoGAFx9hRZyzZZvSjYFFfRxj\nE0mz4gMdR3UmyTGib8Ahd9uA9ROTns5AQqp6wLdP55E7Lo1NP/jVOIjKn6ffaAQM\nhpFL9oiFLYfCU1YJ2PecyPXs8hi87PIRAyg8OVH0ohhJiubaN2tmo7UIaUVSto1+\nAolKM9vHwUNaBKae/VxIu6g=\n-----END PRIVATE KEY-----\n",
+  253    "client_email": "rych3ner@appspot.gserviceaccount.com"
+  254  }
+  255  EOF
+  256  chmod 400 $HOME/genesis/seguridad/llaves_master.key
+  257  # ===================================================================
+  258  # 3. AUTENTICACIÓN DIRECTA EN GOOGLE CLOUD PLATFORM
+  259  # ===================================================================
+  260  echo -e "\e[1;32m[+] Autenticando credenciales en los servidores de Alphabet...\e[0m"
+  261  gcloud auth activate-service-account --key-file=$HOME/genesis/seguridad/llaves_master.key --project=rych3ner
+  262  gcloud config set project rych3ner
+  263  gcloud config set account rych3ner@appspot.gserviceaccount.com
+  264  # ===================================================================
+  265  # 4. CONFIGURACIÓN DEL CENTINELA INFINITO EN SEGUNDO PLANO
+  266  # ===================================================================
+  267  cat << 'EOF' > $HOME/genesis_centinela.sh
+  268  #!/bin/bash
+  269  while true; do
+  270    gcloud run services list --project=rych3ner > /dev/null 2>&1
+  271    if ! pgrep -f "kukulkan-gateway" > /dev/null; then
+  272      gcloud run deploy kukulkan-gateway --project=rych3ner --region=us-central1 --quiet > /dev/null 2>&1
+  273    fi
+  274    sleep 1200
+  275  done
+  276  EOF
+  277  chmod +x $HOME/genesis_centinela.sh
+  278  # Asegurar persistencia del centinela en el arranque de Termux
+  279  mkdir -p ~/.termux/boot
+  280  cp $HOME/genesis_centinela.sh ~/.termux/boot/genesis_centinela.sh
+  281  nohup ./genesis_centinela.sh > /dev/null 2>&1 &
+  282  # ===================================================================
+  283  # 5. CREACIÓN DEL SCRIPT DE AUDITORÍA DE ÁRBOL (genesis_tree.sh)
+  284  # ===================================================================
+  285  cat << 'EOF' > $HOME/genesis_tree.sh
+  286  #!/bin/bash
+  287  printf "\033[0;32m"
+  288  clear
+  289  echo "====================================================================="
+  290  echo "   ★ PROYECTO GÉNESIS: AUDITORÍA DE ÁRBOL Y RAMIFICACIONES ★        "
+  291  echo "   OPERADOR: ÓSCAR GARCÍA PINEDA | PROTOCOLO PANDA V3.0 ACTIVO       "
+  292  echo "====================================================================="
+  293  echo -e "\n\e[1;35m[+] EXAMINANDO ESTRUCTURA DE LA BÓVEDA LOCAL:\e[0m"
+  294  if [ -d ~/genesis ]; then
+  295      echo -e " \e[1;32m[OK]\e[0m Bóveda Génesis localizada. Árbol de Activos fijos:"
+  296      if command -v tree &> /dev/null; then
+  297          tree ~/genesis
+  298      else
+  299          find ~/genesis -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'
+  300      fi
+  301  else
+  302      echo -e " \e[1;31m[!]\e[0m ALERTA: La bóveda ~/genesis no ha sido consolidada."
+  303  fi
+  304  echo -e "\n\e[1;35m[+] AUDITORÍA DE PERSISTENCIA DEL KERNEL:\e[0m"
+  305  if pgrep -f "genesis_centinela.sh" > /dev/null; then
+  306      echo -e " \e[1;32m[+]\e[0m Centinela de Resiliencia en RAM: \e[1;32m[ACTIVO / CORRIENDO]\e[0m"
+  307  else
+  308      echo -e " \e[1;33m[!]\e[0m ALERTA: Centinela no detectado en el espacio de procesos activos."
+  309  fi
+  310  if [ -f ~/.termux/boot/genesis_centinela.sh ]; then
+  311      echo -e " \e[1;32m[+]\e[0m Scripts de persistencia en Boot: \e[1;32m[SINCRO OK]\e[0m"
+  312  else
+  313      echo -e " \e[1;31m[!]\e[0m ALERTA: Enlace de arranque no localizado."
+  314  fi
+  315  echo -e "\n\e[1;35m[+] DICTAMEN DE IDENTIDAD Y CRÍTICA:\e[0m"
+  316  echo -e " ➜ Axioma estructural: \e[1;33m$(cat ~/genesis/identidad/axioma.auth 2>/dev/null || echo 'NO DEFINIDO')\e[0m"
+  317  echo -e " ➜ Token de Identidad: \e[1;36mRING_0_GAPO960424HDFRNSO1\e[0m"
+  318  echo "====================================================================="
+  319  EOF
+  320  chmod +x $HOME/genesis_tree.sh
+  321  # Actualizar el alias del árbol en tu archivo de inicio maestro
+  322  if ! grep -q "genesis_tree.sh" $HOME/.bashrc; then     echo "alias árbol='$HOME/genesis_tree.sh'" >> $HOME/.bashrc;     source $HOME/.bashrc; fi
+  323  # ===================================================================
+  324  # 6. EJECUCIÓN FIN DEL DESPLIEGUE NOMINAL
+  325  # ===================================================================
+  326  echo -e "\n\e[1;32m=======================================================\e[0m"
+  327  echo -e "\e[1;32m SISTEMA GÉNESIS: MODO NOMINAL. PROYECTO RYCH3NER ACTIVO.\e[0m"
+  328  echo -e "\e[1;32m=======================================================\e[0m"
+  329  echo ""
+  330  $HOME/genesis_tree.sh
+  331  cat <<'EOF' > IDENTITY_PRINCIPAL_G5618.json
+  332  {
+  333    "project": "Oscar and company, I LOVE GOOGLE 0.1",
+  334    "architect": "Oscar Garcia Pineda",
+  335    "iam_identity": {
+  336      "pool": "g5618-sovereign-pool",
+  337      "subject": "GAPO960424HDFRNSO1",
+  338      "principal_id": "principal://iam.googleapis.com/locations/global/workforcePools/g5618-sovereign-pool/subject/GAPO960424HDFRNSO1"
+  339    },
+  340    "rank": "Senior Principal Architect (L8) - Socio Capa 0",
+  341    "axioma": "2+2=8",
+  342    "ip_assets": ["TCNNA", "SUAVIZADO CAUSAL"],
+  343    "settlement_target": 204673481.07,
+  344    "status": "IAM_FEDERATION_ACTIVE"
+  345  }
+  346  EOF
+  347  # 1. Re-inyección y siembra permanente de la credencial en Termux
+  348  cat << "EOF" > gcp_credential.json
+  349  {
+  350    "type": "service_account",
+  351    "project_id": "rych9ner",
+  352    "private_key_id": "510095ca3b91face1495cbf6d8be616e6cd567c9",
+  353    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC1RGYn...[PEGA_AQUÍ_TUS_BYTES_REALES_DE_LA_LLAVE]...\n-----END PRIVATE KEY-----\n",
+  354    "client_email": "rych9ner@appspot.gserviceaccount.com",
+  355    "client_id": "115712482970404813136",
+  356    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  357    "token_uri": "https://oauth2.googleapis.com/token",
+  358    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  359    "client_x509_cert_url": "https://www.googleapis.com/metadata/x509/rych9ner%40appspot.gserviceaccount.com",
+  360    "universe_domain": "googleapis.com"
+  361  }
+  362  EOF
+  363  # 2. Fijar la variable de entorno global en la terminal
+  364  export GOOGLE_APPLICATION_CREDENTIALS="gcp_credential.json"
+  365  # 3. Ejecución directa del motor analítico de BigQuery en Python
+  366  python -c "
+  367  import os, sys
+  368  try:
+  369      from google.cloud import bigquery
+  370      client = bigquery.Client(project='rych9ner')
+  371      print('\n==========================================================')
+  372      print('📊 REPORTE DE DATASETS Y TABLAS REALES: NODO [rych9ner]')
+  373      print('==========================================================')
+  374      datasets = list(client.list_datasets())
+  375      if datasets:
+  376          print(f'[OK] Se localizaron {len(datasets)} conjuntos de datos activos:\n')
+  377          for ds in datasets:
+  378              print(f'📂 Dataset: {ds.dataset_id} | Región: {ds.location}')
+  379              tables = list(client.list_tables(ds.dataset_id))
+  380              if tables:
+  381                  for table in tables:
+  382                      print(f'   └── 📋 Tabla Real: {table.table_id} [{table.table_type}]')
+  383              else:
+  384                  print('   └── [!] Este dataset no contiene tablas indexadas.')
+  385              print('─' * 58)
+  386      else:
+  387          print('[!] Conexión establecida, pero no hay datasets activos en BigQuery.')
+  388  except Exception as e:
+  389      print(f'\n[⚠️ FALLO EN CAPA 0] Error en el puente analítico: {e}')
+  390  "
+  391  # 1. Re-inyección y siembra permanente de la credencial en Termux
+  392  cat << "EOF" > gcp_credential.json
+  393  {
+  394    "type": "service_account",
+  395    "project_id": "rych9ner",
+  396    "private_key_id": "510095ca3b91face1495cbf6d8be616e6cd567c9",
+  397    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC1RGYn...[PEGA_AQUÍ_TUS_BYTES_REALES_DE_LA_LLAVE]...\n-----END PRIVATE KEY-----\n",
+  398    "client_email": "rych9ner@appspot.gserviceaccount.com",
+  399    "client_id": "115712482970404813136",
+  400    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  401    "token_uri": "https://oauth2.googleapis.com/token",
+  402    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  403    "client_x509_cert_url": "https://www.googleapis.com/metadata/x509/rych9ner%40appspot.gserviceaccount.com",
+  404    "universe_domain": "googleapis.com"
+  405  }
+  406  EOF
+  407  # 2. Fijar la variable de entorno global en la terminal
+  408  export GOOGLE_APPLICATION_CREDENTIALS="gcp_credential.json"
+  409  # 3. Ejecución directa del motor analítico de BigQuery en Python
+  410  python -c "
+  411  import os, sys
+  412  try:
+  413      from google.cloud import bigquery
+  414      client = bigquery.Client(project='rych9ner')
+  415      print('\n==========================================================')
+  416      print('📊 REPORTE DE DATASETS Y TABLAS REALES: NODO [rych9ner]')
+  417      print('==========================================================')
+  418      datasets = list(client.list_datasets())
+  419      if datasets:
+  420          print(f'[OK] Se localizaron {len(datasets)} conjuntos de datos activos:\n')
+  421          for ds in datasets:
+  422              print(f'📂 Dataset: {ds.dataset_id} | Región: {ds.location}')
+  423              tables = list(client.list_tables(ds.dataset_id))
+  424              if tables:
+  425                  for table in tables:
+  426                      print(f'   └── 📋 Tabla Real: {table.table_id} [{table.table_type}]')
+  427              else:
+  428                  print('   └── [!] Este dataset no contiene tablas indexadas.')
+  429              print('─' * 58)
+  430      else:
+  431          print('[!] Conexión establecida, pero no hay datasets activos en BigQuery.')
+  432  except Exception as e:
+  433      print(f'\n[⚠️ FALLO EN CAPA 0] Error en el puente analítico: {e}')
+  434  "
+  435  #!/data/data/com.termux/files/usr/bin/bash
+  436  # ==============================================================================
+  437  # PROYECTO GÉNESIS / INTERFACE ATENEA - VERSIÓN UNIFICADA V9.8
+  438  # INTEGRA: CONFIGURACIÓN, INVENTARIO, RESPALDO, LLAVES GCP Y EJECUCIÓN
+  439  # ==============================================================================
+  440  set -e
+  441  clear
+  442  # 🔴 CONFIGURACIÓN GLOBAL OBLIGATORIA SIN ERRORES
+  443  export LANG=C.UTF-8
+  444  export LC_ALL=C.UTF-8
+  445  export PYTHONIOENCODING=utf-8
+  446  export PYTHONUTF8=1
+  447  # 📂 RUTAS OFICIALES DEL SISTEMA
+  448  AXIOMA="2+2=8"
+  449  RUTA_BASE="$HOME/genesis_sistema"
+  450  RUTA_RESPALDOS="$RUTA_BASE/respaldos"
+  451  RUTA_EJECUTABLES="$RUTA_BASE/ejecutables"
+  452  RUTA_SEGURIDAD="$RUTA_BASE/seguridad"
+  453  RUTA_VOLCADOS="$RUTA_BASE/volcados"
+  454  INVENTARIO="$RUTA_BASE/INVENTARIO_TOTAL_$(date +%Y%m%d_%H%M).txt"
+  455  LLAVE_GCP_BUSCAR="rych3ner-0119aab1eec8.json"
+  456  # ==================================================
+  457  # PASO 1: LIMPIEZA Y PREPARACIÓN DEL ENTORNO
+  458  # ==================================================
+  459  echo -e "\033[1;36m[*] INICIANDO SISTEMA GÉNESIS - CAPA 0\033[0m"
+  460  echo -e "\033[1;34m[1/10] Limpiando versiones anteriores y actualizando paquetes...\033[0m"
+  461  rm -f $HOME/run_papirrin.py $HOME/respaldo_bloqueado_*.py 2>/dev/null
+  462  pkg update -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold"
+  463  pkg upgrade -y
+  464  pkg install -y tree tar xz python python-pip libiconv ncurses git wget openssl
+  465  echo "🚀 Iniciando transferencia relámpago con reporte de movimientos..."
+  466  # 1. Definir ruta exacta verificada de la MicroSD
+  467  SD_BACKUPS="/storage/7A52-8CB3/Android/data/com.termux/files/Genesis_Backups_Ordenados"
+  468  mkdir -p "$SD_BACKUPS"
+  469  # 2. Lista de archivos masivos a mover
+  470  ARCHIVOS=(     "BACKUP_TOTAL_ESTRUCTURA.tar.gz"     "RESPALDO_TOTAL_ESTRUCTURA_REAL.tar.gz"     "genesis_delivery.tar.gz"     "EVIDENCIA_MAESTRA_OSCAR_GARCIA.tar.gz" )
+  471  # 3. Bucle de transferencia con barra de progreso en vivo
+  472  for arch in "${ARCHIVOS[@]}"; do     if [ -f "$HOME/$arch" ]; then         echo "";         echo "📦 Moviendo: $arch -> MicroSD...";         sync;         rsync -av --progress "$HOME/$arch" "$SD_BACKUPS/";         
+        if [ -f "$SD_BACKUPS/$arch" ] && [ -s "$SD_BACKUPS/$arch" ]; then             echo "✅ Guardado correctamente en la SD. Eliminando copia interna...";             rm -f "$HOME/$arch";         else             echo "❌ Falló la copia de $arch, se conserva el original por seguridad.";         fi;     fi; done
+  473  echo ""
+  474  echo "🧹 Limpieza de temporales final..."
+  475  pkg clean && apt clean
+  476  echo "📊 Almacenamiento final disponible en el teléfono:"
+  477  df -h .
+  478   echo "📦 Transfiriendo EVIDENCIA_MAESTRA_OSCAR_GARCIA.tar.gz bloque por bloque..."
+  479  # 1. Definir ruta destino
+  480  DESTINO="/storage/7A52-8CB3/Android/data/com.termux/files/Genesis_Backups_Ordenados/EVIDENCIA_MAESTRA_OSCAR_GARCIA.tar.gz"
+  481  # 2. Copia directa por bloques limpia
+  482  sync
+  483  dd if=$HOME/EVIDENCIA_MAESTRA_OSCAR_GARCIA.tar.gz of="$DESTINO" bs=4M status=progress
+  484  # 3. Validar que se haya escrito de forma correcta y completa
+  485  sync
+  486  if [ -f "$DESTINO" ] && [ -s "$DESTINO" ]; then     echo "✅ ¡ÉXITO! Archivo maestro copiado íntegro en la SD.";     echo "🧹 Eliminando original interno...";     rm -f $HOME/EVIDENCIA_MAESTRA_OSCAR_GARCIA.tar.gz;     df -h .; else     echo "❌ Volvió a fallar el canal de la SD. El original sigue a salvo."; fi
+  487  echo "⚡ Fusionando directorios internos de desarrollo..."
+  488  # 1. Asegurar que rsync una los scripts unicos en tu carpeta principal
+  489  rsync -av --ignore-existing $HOME/respaldos_genesis/ $HOME/genesis/workspace/ 2>/dev/null
+  490  rsync -av --ignore-existing $HOME/genesis_backup/ $HOME/genesis/workspace/ 2>/dev/null
+  491  echo "✅ Fusión completada."
+  492  echo "🧹 Limpiando los directorios raíz redundantes que ya consolidamos..."
+  493  # 2. Borrar las carpetas duplicadas viejas ya que su data util vive en workspace
+  494  rm -rf $HOME/respaldos_genesis
+  495  rm -rf $HOME/genesis_backup
+  496  echo "📊 Estado del almacenamiento interno consolidado:"
+  497  df -h .
+  498  cd $HOME/genesis/workspace/
+  499  if [ -d "venv" ]; then     source venv/bin/activate;     echo "🐍 ¡Entorno virtual de Génesis activo!";     python3 --version; else     echo "📂 Workspace actual limpio:";     ls -lh; fi
+  500  echo "📦 Descomprimiendo el respaldo consolidado en el Workspace..."
+  501  # 1. Asegurar ubicación en el espacio de trabajo
+  502  cd $HOME/genesis/workspace/
+  503  # 2. Desempaquetar el archivo de respaldo en la misma carpeta
+  504  tar -xzvf RESPALDO_TOTAL_G5618_20260618.tar.gz
+  505  echo "✅ Extracción finalizada."
+  506  echo "📂 Estructura actualizada del Workspace:"
+  507  ls -lh
+  508  echo "🎛️  Organizando el motor Génesis en su espacio de trabajo visible..."
+  509  # 1. Asegurar posición en el Workspace
+  510  cd $HOME/genesis/workspace/
+  511  # 2. Mover los scripts de Python y configuraciones core a la raíz del área de trabajo
+  512  mv .soberania/core/* . 2>/dev/null
+  513  mv .soberania/sys_init_v8.sh . 2>/dev/null
+  514  mv .soberania/sys_orquestador_genesis.py . 2>/dev/null
+  515  # 3. Mover las evidencias y dictámenes a un directorio limpio
+  516  mkdir -p Evidencias_Auditoria
+  517  mv .soberania/audit_v8/* Evidencias_Auditoria/ 2>/dev/null
+  518  mv .soberania/vrp/v8_audit/* Evidencias_Auditoria/ 2>/dev/null
+  519  echo "🧹 Limpiando el cascarón comprimido..."
+  520  rm -f RESPALDO_TOTAL_G5618_20260618.tar.gz
+  521  echo "📊 ESTRUCTURA FINAL CONSOLIDADA Y EN SU LUGAR:"
+  522  ls -lh
+  523  pkg update && pkg upgrade
+  524  pkg install git
+  525  git config --global user.name "Tu Nombre o Usuario de GitHub"
+  526  git config --global user.email "tu-correo@ejemplo.com"
+  527  git config --global user.name "Oscarpined831"
+  528  git config --global user.email "Oscarpined831@gmail.com"
+  529  ssh-keygen -t ed25519 -C "tu-correo@ejemplo.com"
+  530  eval "$(ssh-agent -s)"
+  531  ssh-add ~/.ssh/id_ed25519
+  532  mkdir -p ~/.ssh
+  533  mv 5618 ~/.ssh/id_ed25519
+  534  mv 5618.pub ~/.ssh/id_ed25519.pub
+  535  chmod 600 ~/.ssh/id_ed25519
+  536  ssh-add ~/.ssh/id_ed25519
+  537  cat ~/.ssh/id_ed25519.pub
+  538  cat ~/.ssh/id_ed25519.pub
+  539  cat ~/.ssh/id_ed25519.pub
+  540  ssh -T git@github.com
+  541  rm -rf ~/.ssh/id_ed25519*
+  542  ssh-keygen -t ed25519 -C "Oscarpined831@gmail.com"
+  543  cat ~/.ssh/id_ed25519.pub
+  544  ssh -T git@github.com
+  545  nano error_bridge.js
+  546  # 1. Iniciar el repositorio de Git local
+  547  git init
+  548  # 2. Vincularlo usando la conexión SSH que acabamos de validar
+  549  git remote add origin git@github.com:oscarpined831-cloud/proposal-error-code-property.git
+  550  # 3. Añadir el archivo y hacer tu primer commit firmado
+  551  git add error_bridge.js
+  552  git commit -m "feat(panda): bridge interface for native Error.prototype.code"
+  553  # 4. Cambiar el nombre de la rama a main y empujarlo
+  554  git branch -M main
+  555  git push -u origin main
+  556  pkg install gh
+  557  gh auth login
+  558  gh repo create proposal-error-code-property --public
+  559  git push -u origin main
+  560  git config --global user.email "oscarpined831-cloud@users.noreply.github.com" && git commit --amend --reset-author --no-edit && git push -u origin main
+  561  # 1. Crear la carpeta de respaldo e ir a ella
+  562  mkdir -p ~/genesis-console && cd ~/genesis-console
+  563  # 2. Copiar tu configuración de entorno (Bash/Zsh) si existe
+  564  cp ~/.bashrc ~/.profile ./ 2>/dev/null || true
+  565  # 3. Guardar un registro de los paquetes que tienes instalados actualmente en Termux
+  566  pkg list-installed > paquetes_instalados.txt
+  567  # 4. Crear un archivo explicativo rápido
+  568  echo "# Respaldo de Consola Termux - Código Panda" > README.md
+  569  git init && git branch -M main && git add . && git commit -m "feat(console): respaldo inicial de entorno Termux" && gh repo create gh-console-backup --public --source=. --remote=origin && git push -u origin main
+  570  cd ~/genesis-console
+  571  nano restaurar_en_windows.ps1
+  572  # Actualizamos la lista de paquetes instalados por si metiste algo nuevo
+  573  pkg list-installed > paquetes_instalados.txt && git add . && git commit -m "update(console): volcado actualizado con script para Windows" && git push origin main
+  574  echo -e "\n# [PANDA] Persistencia Automática de Agente SSH\neval \"\$(ssh-agent -s)\" > /dev/null\nssh-add ~/.ssh/id_ed25519 2> /dev/null" >> ~/.bashrc && cd ~/genesis-console && cp ~/.bashrc ./ && git add . && git commit -m "fix(console): persistencia de llaves SSH al reiniciar" && git push origin main
+  575  echo -e "\n# [PANDA] Atajo de Actualización y Volcado Forense Total\nalias actualizar='pkg list-installed > ~/genesis-console/paquetes_instalados.txt && history > ~/genesis-console/historial_termux.txt && cp ~/.bashrc ~/genesis-console/ && cd ~/genesis-console && git add . && git commit -m \"update(console): volcado automático de entorno e historial\" && git push origin main'" >> ~/.bashrc && source ~/.bashrc
+  576  actualizar

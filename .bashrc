@@ -27,3 +27,6 @@ export LC_ALL=en_US.UTF-8
 # [PANDA] Persistencia Automática de Agente SSH
 eval "$(ssh-agent -s)" > /dev/null
 ssh-add ~/.ssh/id_ed25519 2> /dev/null
+
+# [PANDA] Atajo de Actualización y Volcado Forense Total
+alias actualizar='pkg list-installed > ~/genesis-console/paquetes_instalados.txt && history > ~/genesis-console/historial_termux.txt && cp ~/.bashrc ~/genesis-console/ && cd ~/genesis-console && git add . && git commit -m "update(console): volcado automático de entorno e historial" && git push origin main'
